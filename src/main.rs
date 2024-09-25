@@ -1,14 +1,13 @@
 use anyhow;
-use aws_config::SdkConfig;
-use aws_sdk_sqs::Client;
 use aws_sdk_sqs::operation::create_queue::CreateQueueOutput;
 use aws_sdk_sqs::operation::send_message::SendMessageOutput;
+use aws_sdk_sqs::Client;
 
 #[tokio::main]
 async fn main() {
     dotenvy::dotenv().expect("Failed to load env");
     let sdk_config = aws_config::load_from_env().await;
-    let sqs_client = aws_sdk_sqs::Client::new(&sdk_config);
+    let sqs_client = Client::new(&sdk_config);
     let created_queue = create_queue(sqs_client.clone(), "queue-test-from-rs-1235").await;
 
     match created_queue {
